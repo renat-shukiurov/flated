@@ -18,9 +18,14 @@ then
 elif [[ "$env" = "install" ]]
 then
     echo "ENV: prod";
-    docker run --rm --name="dev-flated-node" --net devnetwork -it -v $(pwd):/app flated-node-image sh -c "yarn install";
+    docker run --rm --name="dev-flated-node" --net devnetwork -d -v $(pwd):/app flated-node-image sh -c "yarn install && yarn run start";
+
+elif [[ "$env" = "image" ]]
+then
+    echo "ENV: build image";
+    docker build -t flated-node-image .
 
 else
     echo "ENV: prod";
-    docker run --rm --name="dev-flated-node" --net devnetwork -it -v $(pwd):/app flated-node-image sh -c "yarn install && yarn run start";
+    docker run --rm --name="dev-flated-node" --net devnetwork -d -v $(pwd):/app flated-node-image sh -c "yarn install && yarn run start";
 fi
